@@ -1,0 +1,60 @@
+import { Badge } from "@/components/ui/badge"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+
+const orders = [
+  {
+    id: "ORD-001",
+    date: "2023-04-15",
+    products: 5,
+    status: "Delivered",
+  },
+  {
+    id: "ORD-002",
+    date: "2023-04-22",
+    products: 3,
+    status: "Pending",
+  },
+  {
+    id: "ORD-003",
+    date: "2023-04-30",
+    products: 7,
+    status: "Processing",
+  },
+]
+
+export function RecentOrdersTable() {
+  return (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Order ID</TableHead>
+          <TableHead>Date</TableHead>
+          <TableHead>Products</TableHead>
+          <TableHead>Status</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {orders.map((order) => (
+          <TableRow key={order.id}>
+            <TableCell className="font-medium">{order.id}</TableCell>
+            <TableCell>{order.date}</TableCell>
+            <TableCell>{order.products}</TableCell>
+            <TableCell>
+              <Badge
+                variant={
+                  order.status === "Delivered"
+                    ? "default"
+                    : order.status === "Processing"
+                    ? "secondary"
+                    : "outline"
+                }
+              >
+                {order.status}
+              </Badge>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  )
+}

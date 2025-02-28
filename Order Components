@@ -1,0 +1,168 @@
+"use client"
+
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Textarea } from "@/components/ui/textarea"
+import { Edit, Plus, Trash } from 'lucide-react'
+
+interface OrderItem {
+  id: string
+  name: string
+  quantity: number
+  selected: boolean
+}
+
+const initialItems: OrderItem[] = [
+  { id: "PROD-002", name: "Scratch Cards B", quantity: 55, selected: true },
+  { id: "PROD-003", name: "Lottery Tickets", quantity: 105, selected: true },
+  { id: "PROD-004", name: "Promotional Items", quantity: 40, selected: true },
+  { id: "PROD-006", name: "Seasonal Cards", quantity: 50, selected: true },
+]
+
+export function OrderForm() {
+  const [items, setItems] = useState<OrderItem[]>(initialItems)
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [editValue, setEditValue] = useState<number>(0)
+  const [recipient, setRecipient] = useState("supplier@example.com")
+  const [notes, setNotes] = useState("")
+
+  const handleEdit = (id: string, quantity: number) => {
+    setEditingId(id)
+    setEditValue(quantity)
+  }
+
+  const handleSave = (id: string) => {
+    setItems(
+      items.map((item) => {
+        if (item.id === id) {
+          return { ...item, quantity: editValue }
+        }
+        return item
+      })
+    )
+    setEditingId(null)
+  }
+
+  const handleSelectChange = (id: string, checked: boolean) => {
+    setItems(
+      items.map((item) => {
+        if (item.id === id) {
+          return { ...item, selected: checked }
+        }
+        return item
+      })
+    )
+  }
+
+  const handleRemove = (id: string) => {
+    setItems(items.filter((item) => item.id !== id))
+  }
+
+  return (
+    <div className="space-y-6">
+      <div className="space-y-4">
+        <div>
+          <Label htmlFor="recipient">Recipient Email</Label>
+          <Input
+            id="recipient"
+            value={recipient}
+            onChange={(e) => setRecipient(e.target.value)}
+            className="mt-1"
+          />
+        </div>
+        
+        <div>
+          <Label htmlFor="notes">Additional Notes</Label>
+          <Textarea
+            id="notes"
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            placeholder="Any special instructions or comments..."
+            className="mt-1"
+          />
+        </div>
+      </div>
+      
+      <div>
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="text-lg font-medium">Order Items</h3>
+          <Button size="sm" variant="outline">
+            <Plus className="mr-2 h-4 w-4" />
+            Add Item
+          </Button>
+        </div>
+        
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-12">
+                <Checkbox />
+              </TableHead>
+              <TableHead>Product</TableHead>
+              <TableHead>Quantity</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {items.map((item) => (
+              <TableRow key={item.id}>
+                <TableCell>
+                  <Checkbox
+                    checked={item.selected}
+                    onCheckedChange={(checked) => handleSelectChange(item.id, checked as boolean)}
+                  />
+                </TableCell>
+                <TableCell>{item.name}</TableCell>
+                <TableCell>
+                  {editingId === item.id ? (
+                    <Input
+                      type="number"
+                      value={editValue}
+                      onChange={(e) => setEditValue(parseInt(e.target.value))}
+                      className="w-24"
+                    />
+                  ) : (
+                    item.quantity
+                  )}
+                </TableCell>
+                <TableCell className="text-right">
+                  <div className="flex justify-end gap-2">
+                    {editingId === item.id ? (
+                      <Button size="sm" onClick={() => handleSave(item.id)}>
+                        Save
+                      </Button>
+                    ) : (
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => handleEdit(item.id, item.quantity)}
+                      >
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                    )}
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => handleRemove(item.id)}
+                    >
+                      <Trash className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+      
+      <div className="flex justify-end space-x-4">
+        <Button variant="outline">Save Draft</Button>
+        <Button>Send Order</Button>
+      </div>
+    </div>
+  )
+}

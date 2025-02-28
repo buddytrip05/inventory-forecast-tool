@@ -1,0 +1,61 @@
+"use client"
+
+import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
+import { Copy, Mail } from 'lucide-react'
+
+export function OrderPreview() {
+  const today = new Date().toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  })
+
+  return (
+    <div className="space-y-4">
+      <Card className="p-4">
+        <div className="space-y-4">
+          <div>
+            <div className="text-sm font-medium text-muted-foreground">To:</div>
+            <div>supplier@example.com</div>
+          </div>
+          
+          <div>
+            <div className="text-sm font-medium text-muted-foreground">Subject:</div>
+            <div>Order Request - {today}</div>
+          </div>
+          
+          <div className="border-t pt-4">
+            <div className="prose prose-sm max-w-none">
+              <p>Hi Sales Rep,</p>
+              
+              <p>Based on our latest inventory analysis, we need to place the following order:</p>
+              
+              <ul>
+                <li>Scratch Cards B: 55 units</li>
+                <li>Lottery Tickets: 105 units</li>
+                <li>Promotional Items: 40 units</li>
+                <li>Seasonal Cards: 50 units</li>
+              </ul>
+              
+              <p>Please confirm availability and expected delivery date.</p>
+              
+              <p>Thanks,<br />Lottery Fulfillment Manager</p>
+            </div>
+          </div>
+        </div>
+      </Card>
+      
+      <div className="flex justify-end space-x-4">
+        <Button variant="outline">
+          <Copy className="mr-2 h-4 w-4" />
+          Copy to Clipboard
+        </Button>
+        <Button>
+          <Mail className="mr-2 h-4 w-4" />
+          Send Email
+        </Button>
+      </div>
+    </div>
+  )
+}

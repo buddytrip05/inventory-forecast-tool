@@ -1,0 +1,82 @@
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { ForecastSettings } from "@/components/forecast/forecast-settings"
+import { ForecastTable } from "@/components/forecast/forecast-table"
+import { ForecastChart } from "@/components/forecast/forecast-chart"
+import { Mail, Settings } from 'lucide-react'
+import Link from "next/link"
+
+export default function ForecastPage() {
+  return (
+    <div className="flex flex-col">
+      <div className="flex items-center justify-between border-b px-6 py-4">
+        <div>
+          <h1 className="text-2xl font-bold">Demand Forecasting</h1>
+          <p className="text-muted-foreground">Predict future demand and calculate optimal order quantities</p>
+        </div>
+        <div className="flex items-center gap-4">
+          <Button variant="outline">
+            <Settings className="mr-2 h-4 w-4" />
+            Forecast Settings
+          </Button>
+          <Button asChild>
+            <Link href="/orders">
+              <Mail className="mr-2 h-4 w-4" />
+              Generate Order
+            </Link>
+          </Button>
+        </div>
+      </div>
+      
+      <div className="p-6">
+        <Tabs defaultValue="forecast">
+          <TabsList>
+            <TabsTrigger value="forecast">Forecast Results</TabsTrigger>
+            <TabsTrigger value="settings">Forecast Settings</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="forecast" className="mt-6 space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Demand Forecast</CardTitle>
+                <CardDescription>
+                  Projected demand for the next 30 days based on historical data
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ForecastChart />
+              </CardContent>
+            </Card>
+            
+            <Card>
+              <CardHeader>
+                <CardTitle>Order Recommendations</CardTitle>
+                <CardDescription>
+                  Calculated order quantities based on forecasted demand and reserve levels
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ForecastTable />
+              </CardContent>
+            </Card>
+          </TabsContent>
+          
+          <TabsContent value="settings" className="mt-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Forecast Configuration</CardTitle>
+                <CardDescription>
+                  Customize your forecasting parameters and calculation methods
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ForecastSettings />
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </div>
+  )
+}

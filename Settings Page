@@ -1,0 +1,260 @@
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Switch } from "@/components/ui/switch"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+
+export default function SettingsPage() {
+  return (
+    <div className="flex flex-col">
+      <div className="flex items-center justify-between border-b px-6 py-4">
+        <div>
+          <h1 className="text-2xl font-bold">Settings</h1>
+          <p className="text-muted-foreground">Configure your inventory forecasting system</p>
+        </div>
+      </div>
+      
+      <div className="p-6">
+        <Tabs defaultValue="general">
+          <TabsList>
+            <TabsTrigger value="general">General</TabsTrigger>
+            <TabsTrigger value="notifications">Notifications</TabsTrigger>
+            <TabsTrigger value="suppliers">Suppliers</TabsTrigger>
+            <TabsTrigger value="data">Data Management</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="general" className="mt-6 space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>General Settings</CardTitle>
+                <CardDescription>
+                  Configure basic settings for your inventory system
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="company-name">Company Name</Label>
+                    <Input id="company-name" defaultValue="Lottery Fulfillment Co." />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="manager-name">Manager Name</Label>
+                    <Input id="manager-name" defaultValue="John Smith" />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email Address</Label>
+                    <Input id="email" type="email" defaultValue="john.smith@example.com" />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="timezone">Timezone</Label>
+                    <Select defaultValue="america-new_york">
+                      <SelectTrigger id="timezone">
+                        <SelectValue placeholder="Select timezone" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="america-new_york">America/New York</SelectItem>
+                        <SelectItem value="america-chicago">America/Chicago</SelectItem>
+                        <SelectItem value="america-denver">America/Denver</SelectItem>
+                        <SelectItem value="america-los_angeles">America/Los Angeles</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="dark-mode">Dark Mode</Label>
+                    <Switch id="dark-mode" />
+                  </div>
+                </div>
+                
+                <div className="flex justify-end">
+                  <Button>Save Changes</Button>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          
+          <TabsContent value="notifications" className="mt-6 space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Notification Settings</CardTitle>
+                <CardDescription>
+                  Configure when and how you receive notifications
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <Label className="text-base">Low Stock Alerts</Label>
+                      <p className="text-sm text-muted-foreground">
+                        Receive notifications when products approach reserve levels
+                      </p>
+                    </div>
+                    <Switch defaultChecked />
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <Label className="text-base">Order Confirmations</Label>
+                      <p className="text-sm text-muted-foreground">
+                        Receive notifications when orders are confirmed by suppliers
+                      </p>
+                    </div>
+                    <Switch defaultChecked />
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <Label className="text-base">Delivery Notifications</Label>
+                      <p className="text-sm text-muted-foreground">
+                        Receive notifications when orders are delivered
+                      </p>
+                    </div>
+                    <Switch />
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <Label className="text-base">Weekly Reports</Label>
+                      <p className="text-sm text-muted-foreground">
+                        Receive weekly inventory and forecast reports
+                      </p>
+                    </div>
+                    <Switch defaultChecked />
+                  </div>
+                </div>
+                
+                <div className="flex justify-end">
+                  <Button>Save Changes</Button>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          
+          <TabsContent value="suppliers" className="mt-6 space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Supplier Management</CardTitle>
+                <CardDescription>
+                  Manage your suppliers and their contact information
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="space-y-4">
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label htmlFor="primary-supplier">Primary Supplier</Label>
+                      <Input id="primary-supplier" defaultValue="Main Supplier Inc." />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="primary-contact">Contact Name</Label>
+                      <Input id="primary-contact" defaultValue="Jane Doe" />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="primary-email">Email</Label>
+                      <Input id="primary-email" type="email" defaultValue="jane.doe@supplier.com" />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="primary-phone">Phone</Label>
+                      <Input id="primary-phone" type="tel" defaultValue="(555) 123-4567" />
+                    </div>
+                  </div>
+                  
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label htmlFor="secondary-supplier">Secondary Supplier</Label>
+                      <Input id="secondary-supplier" defaultValue="Secondary Supplier Co." />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="secondary-contact">Contact Name</Label>
+                      <Input id="secondary-contact" defaultValue="John Johnson" />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="secondary-email">Email</Label>
+                      <Input id="secondary-email" type="email" defaultValue="john@secondary.com" />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="secondary-phone">Phone</Label>
+                      <Input id="secondary-phone" type="tel" defaultValue="(555) 987-6543" />
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="flex justify-between">
+                  <Button variant="outline">Add Supplier</Button>
+                  <Button>Save Changes</Button>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          
+          <TabsContent value="data" className="mt-6 space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Data Management</CardTitle>
+                <CardDescription>
+                  Manage your inventory data and import/export options
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <Label className="text-base">Auto-Backup</Label>
+                      <p className="text-sm text-muted-foreground">
+                        Automatically backup your inventory data daily
+                      </p>
+                    </div>
+                    <Switch defaultChecked />
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <Label className="text-base">Data Retention</Label>
+                      <p className="text-sm text-muted-foreground">
+                        How long to keep historical data
+                      </p>
+                    </div>
+                    <Select defaultValue="365">
+                      <SelectTrigger className="w-40">
+                        <SelectValue placeholder="Select period" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="90">90 days</SelectItem>
+                        <SelectItem value="180">180 days</SelectItem>
+                        <SelectItem value="365">1 year</SelectItem>
+                        <SelectItem value="730">2 years</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                
+                <div className="flex flex-col gap-4 sm:flex-row sm:justify-between">
+                  <div className="grid gap-2 sm:grid-cols-2">
+                    <Button variant="outline">Export Data</Button>
+                    <Button variant="outline">Import Data</Button>
+                  </div>
+                  
+                  <Button variant="destructive">Reset All Data</Button>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </div>
+  )
+}

@@ -1,0 +1,147 @@
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { AlertCircle, ArrowRight, Box, Mail, TrendingDown, TrendingUp } from 'lucide-react'
+import Link from "next/link"
+import { InventoryStatusChart } from "@/components/dashboard/inventory-status-chart"
+import { RecentOrdersTable } from "@/components/dashboard/recent-orders-table"
+import { StockAlerts } from "@/components/dashboard/stock-alerts"
+
+export default function Dashboard() {
+  return (
+    <div className="flex flex-col">
+      <div className="flex items-center justify-between border-b px-6 py-4">
+        <div>
+          <h1 className="text-2xl font-bold">Dashboard</h1>
+          <p className="text-muted-foreground">Overview of your inventory and forecasts</p>
+        </div>
+        <div className="flex items-center gap-4">
+          <Button asChild variant="outline">
+            <Link href="/orders">
+              <Mail className="mr-2 h-4 w-4" />
+              Generate Order
+            </Link>
+          </Button>
+          <Button asChild>
+            <Link href="/inventory">
+              <Box className="mr-2 h-4 w-4" />
+              Update Inventory
+            </Link>
+          </Button>
+        </div>
+      </div>
+      
+      <div className="grid gap-6 p-6 md:grid-cols-2 lg:grid-cols-4">
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium">Total Products</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">42</div>
+            <p className="text-xs text-muted-foreground">
+              <Badge variant="outline" className="mr-1">
+                +2
+              </Badge>
+              since last month
+            </p>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium">Low Stock Items</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-amber-500">7</div>
+            <p className="text-xs text-muted-foreground">
+              <Badge variant="outline" className="mr-1 bg-amber-50">
+                <TrendingUp className="mr-1 h-3 w-3 text-amber-500" />
+                +3
+              </Badge>
+              since last week
+            </p>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium">Out of Stock</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-destructive">2</div>
+            <p className="text-xs text-muted-foreground">
+              <Badge variant="outline" className="mr-1 bg-red-50">
+                <TrendingUp className="mr-1 h-3 w-3 text-destructive" />
+                +1
+              </Badge>
+              since yesterday
+            </p>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium">Pending Orders</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">3</div>
+            <p className="text-xs text-muted-foreground">
+              <Badge variant="outline" className="mr-1">
+                <TrendingDown className="mr-1 h-3 w-3 text-green-500" />
+                -2
+              </Badge>
+              since last week
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+      
+      <div className="grid gap-6 p-6 md:grid-cols-2 lg:grid-cols-3">
+        <Card className="col-span-2">
+          <CardHeader>
+            <CardTitle>Inventory Status</CardTitle>
+            <CardDescription>
+              Current inventory levels compared to reserve thresholds
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <InventoryStatusChart />
+          </CardContent>
+        </Card>
+        
+        <Card className="lg:row-span-2">
+          <CardHeader>
+            <CardTitle>Stock Alerts</CardTitle>
+            <CardDescription>
+              Products that need attention
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <StockAlerts />
+          </CardContent>
+        </Card>
+        
+        <Card className="col-span-2">
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle>Recent Orders</CardTitle>
+              <CardDescription>
+                Your most recent order requests
+              </CardDescription>
+            </div>
+            <Button variant="ghost" size="sm" asChild>
+              <Link href="/orders">
+                View All
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </CardHeader>
+          <CardContent>
+            <RecentOrdersTable />
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  )
+}

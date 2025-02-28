@@ -1,0 +1,87 @@
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { AlertCircle, ArrowRight } from 'lucide-react'
+import Link from "next/link"
+
+const alerts = [
+  {
+    product: "Scratch Cards B",
+    status: "low",
+    current: 45,
+    reserve: 40,
+    message: "Approaching reserve level",
+  },
+  {
+    product: "Lottery Tickets",
+    status: "critical",
+    current: 60,
+    reserve: 75,
+    message: "Below reserve level",
+  },
+  {
+    product: "Promotional Items",
+    status: "critical",
+    current: 15,
+    reserve: 30,
+    message: "Below reserve level",
+  },
+  {
+    product: "Seasonal Cards",
+    status: "out",
+    current: 5,
+    reserve: 25,
+    message: "Almost out of stock",
+  },
+]
+
+export function StockAlerts() {
+  return (
+    <div className="space-y-4">
+      {alerts.map((alert) => (
+        <Alert
+          key={alert.product}
+          variant={
+            alert.status === "out"
+              ? "destructive"
+              : alert.status === "critical"
+              ? "default"
+              : "outline"
+          }
+        >
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle className="flex items-center gap-2">
+            {alert.product}
+            <Badge
+              variant={
+                alert.status === "out"
+                  ? "destructive"
+                  : alert.status === "critical"
+                  ? "default"
+                  : "outline"
+              }
+            >
+              {alert.status === "out"
+                ? "Critical"
+                : alert.status === "critical"
+                ? "Low"
+                : "Warning"}
+            </Badge>
+          </AlertTitle>
+          <AlertDescription className="mt-2">
+            <div className="text-sm">{alert.message}</div>
+            <div className="mt-2 text-xs">
+              Current: {alert.current} | Reserve: {alert.reserve}
+            </div>
+          </AlertDescription>
+        </Alert>
+      ))}
+      <Button variant="outline" size="sm" className="w-full" asChild>
+        <Link href="/inventory">
+          View All Inventory
+          <ArrowRight className="ml-2 h-4 w-4" />
+        </Link>
+      </Button>
+    </div>
+  )
+}

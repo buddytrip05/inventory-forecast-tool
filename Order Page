@@ -1,0 +1,77 @@
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { OrderForm } from "@/components/orders/order-form"
+import { OrderPreview } from "@/components/orders/order-preview"
+import { OrderHistory } from "@/components/orders/order-history"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Clock } from 'lucide-react'
+
+export default function OrdersPage() {
+  return (
+    <div className="flex flex-col">
+      <div className="flex items-center justify-between border-b px-6 py-4">
+        <div>
+          <h1 className="text-2xl font-bold">Order Management</h1>
+          <p className="text-muted-foreground">Generate and manage your order requests</p>
+        </div>
+        <Button variant="outline" asChild>
+          <a href="/orders/history">
+            <Clock className="mr-2 h-4 w-4" />
+            Order History
+          </a>
+        </Button>
+      </div>
+      
+      <div className="p-6">
+        <Tabs defaultValue="new">
+          <TabsList>
+            <TabsTrigger value="new">New Order</TabsTrigger>
+            <TabsTrigger value="history">Order History</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="new" className="mt-6">
+            <div className="grid gap-6 md:grid-cols-2">
+              <Card className="md:col-span-1">
+                <CardHeader>
+                  <CardTitle>Order Details</CardTitle>
+                  <CardDescription>
+                    Review and adjust your order before sending
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <OrderForm />
+                </CardContent>
+              </Card>
+              
+              <Card className="md:col-span-1">
+                <CardHeader>
+                  <CardTitle>Email Preview</CardTitle>
+                  <CardDescription>
+                    Preview the email that will be sent to your supplier
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <OrderPreview />
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="history" className="mt-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Order History</CardTitle>
+                <CardDescription>
+                  View and track your previous orders
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <OrderHistory />
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </div>
+  )
+}

@@ -1,0 +1,205 @@
+"use client"
+
+import { useState } from "react"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Edit, Save } from 'lucide-react'
+
+interface Product {
+  id: string
+  name: string
+  category: string
+  current: number
+  reserve: number
+  status: "normal" | "low" | "critical" | "out"
+}
+
+const initialProducts: Product[] = [
+  {
+    id: "PROD-001",
+    name: "Scratch Cards A",
+    category: "Scratch Cards",
+    current: 120,
+    reserve: 50,
+    status: "normal",
+  },
+  {
+    id: "PROD-002",
+    name: "Scratch Cards B",
+    category: "Scratch Cards",
+    current: 45,
+    reserve: 40,
+    status: "low",
+  },
+  {
+    id: "PROD-003",
+    name: "Lottery Tickets",
+    category: "Tickets",
+    current: 60,
+    reserve: 75,
+    status: "critical",
+  },
+  {
+    id: "PROD-004",
+    name: "Promotional Items",
+    category: "Merchandise",
+    current: 15,
+    reserve: 30,
+    status: "critical",
+  },
+  {
+    id: "PROD-005",
+    name: "Gift Cards",
+    category: "Cards",
+    current: 25,
+    reserve: 20,
+    status: "normal",
+  },
+  {
+    id: "PROD-006",
+    name: "Seasonal Cards",
+    category: "Cards",
+    current: 5,
+    reserve: 25,
+    status: "out",
+  },
+]
+
+interface InventoryTableProps {
+  showReserveControls?: boolean
+}
+
+export function InventoryTable({ showReserveControls = false }: InventoryTableProps) {
+  const [products, setProducts] = useState<Product[]>(initialProducts)
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [editValues, setEditValues] = useState<{ [key: string]: number }>({})
+
+  const handleEdit = (id: string, field: "current" | "reserve", value: number) => {
+    setEditingId(id)
+    setEditValues({ ...editValues, [field]: value })
+  }
+
+  const handleSave = (id: string) => {
+    setProducts(
+      products.map((product) => {
+        if (product.id === id) {
+          const updatedProduct = { ...product }
+          
+          if (editValues.current !== undefined) {
+            updatedProduct.current = editValues.current
+          }
+          
+          if (editValues.reserve !== undefined) {
+            updatedProduct.reserve = editValues.reserve
+          }
+          
+          // Update status based on current and reserve levels
+          if (updatedProduct.current === 0) {
+            updatedProduct.status = "out"
+          } else if (updatedProduct.current < updatedProduct.reserve * 0.5) {
+            updatedProduct.status = "critical"
+          } else if (updatedProduct.current < updatedProduct.reserve) {
+            updatedProduct.status = "low"
+          } else {
+            updatedProduct.status = "normal"
+          }
+          
+          return updatedProduct
+        }
+        return product
+      })
+    )
+    
+    setEditingId(null)
+    setEditValues({})
+  }
+
+  return (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Product ID</TableHead>
+          <TableHead>Name</TableHead>
+          <TableHead>Category</TableHead>
+          <TableHead>Current Stock</TableHead>
+          <TableHead>Reserve Level</TableHead>
+          <TableHead>Status</TableHead>
+          <TableHead className="text-right">Actions</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {products.map((product) => (
+          <TableRow key={product.id}>
+            <TableCell className="font-medium">{product.id}</TableCell>
+            <TableCell>{product.name}</TableCell>
+            <TableCell>{product.category}</TableCell>
+            <TableCell>
+              {editingId === product.id && !showReserveControls ? (
+                <Input
+                  type="number"
+                  value={editValues.current ?? product.current}
+                  onChange={(e) => handleEdit(product.id, "current", parseInt(e.target.value))}
+                  className="w-24"
+                />
+              ) : (
+                product.current
+              )}
+            </TableCell>
+            <TableCell>
+              {editingId === product.id && showReserveControls ? (
+                <Input
+                  type="number"
+                  value={editValues.reserve ?? product.reserve}
+                  onChange={(e) => handleEdit(product.id, "reserve", parseInt(e.target.value))}
+                  className="w-24"
+                />
+              ) : (
+                product.reserve
+              )}
+            </TableCell>
+            <TableCell>
+              <Badge
+                variant={
+                  product.status === "normal"
+                    ? "outline"
+                    : product.status === "low"
+                    ? "secondary"
+                    : product.status === "critical"
+                    ? "default"
+                    : "destructive"
+                }
+              >
+                {product.status === "normal"
+                  ? "Normal"
+                  : product.status === "low"
+                  ? "Low"
+                  : product.status === "critical"
+                  ? "Critical"
+                  : "Out of Stock"}
+              </Badge>
+            </TableCell>
+            <TableCell className="text-right">
+              {editingId === product.id ? (
+                <Button size="sm" onClick={() => handleSave(product.id)}>
+                  <Save className="mr-2 h-4 w-4" />
+                  Save
+                </Button>
+              ) : (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => handleEdit(product.id, showReserveControls ? "reserve" : "current", 0)}
+                >
+                  <Edit className="mr-2 h-4 w-4" />
+                  {showReserveControls ? "Edit Reserve" : "Update Stock"}
+                </Button>
+              )}
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  )
+}

@@ -1,0 +1,166 @@
+"use client"
+
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Slider } from "@/components/ui/slider"
+import { Switch } from "@/components/ui/switch"
+
+export function ForecastSettings() {
+  const [forecastDays, setForecastDays] = useState(14)
+  const [leadTime, setLeadTime] = useState(3)
+  const [seasonalityEnabled, setSeasonalityEnabled] = useState(false)
+  
+  return (
+    <div className="space-y-8">
+      <div className="grid gap-6 md:grid-cols-2">
+        <div className="space-y-4">
+          <div>
+            <Label htmlFor="forecast-window">Forecast Window (Days)</Label>
+            <div className="mt-2 flex items-center gap-4">
+              <Slider
+                id="forecast-window"
+                min={7}
+                max={30}
+                step={1}
+                value={[forecastDays]}
+                onValueChange={(value) => setForecastDays(value[0])}
+                className="flex-1"
+              />
+              <Input
+                type="number"
+                value={forecastDays}
+                onChange={(e) => setForecastDays(parseInt(e.target.value))}
+                className="w-16"
+              />
+            </div>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Number of days to forecast demand into the future
+            </p>
+          </div>
+          
+          <div>
+            <Label htmlFor="lead-time">Supplier Lead Time (Days)</Label>
+            <div className="mt-2 flex items-center gap-4">
+              <Slider
+                id="lead-time"
+                min={1}
+                max={14}
+                step={1}
+                value={[leadTime]}
+                onValueChange={(value) => setLeadTime(value[0])}
+                className="flex-1"
+              />
+              <Input
+                type="number"
+                value={leadTime}
+                onChange={(e) => setLeadTime(parseInt(e.target.value))}
+                className="w-16"
+              />
+            </div>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Average time between placing an order and receiving it
+            </p>
+          </div>
+        </div>
+        
+        <div className="space-y-4">
+          <div>
+            <Label>Forecast Method</Label>
+            <RadioGroup defaultValue="moving-average" className="mt-2">
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="moving-average" id="moving-average" />
+                <Label htmlFor="moving-average">Moving Average</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="weighted-average" id="weighted-average" />
+                <Label htmlFor="weighted-average">Weighted Average</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="exponential" id="exponential" />
+                <Label htmlFor="exponential">Exponential Smoothing</Label>
+              </div>
+            </RadioGroup>
+          </div>
+          
+          <div>
+            <Label>Historical Data Range</Label>
+            <Select defaultValue="30">
+              <SelectTrigger className="mt-2">
+                <SelectValue placeholder="Select range" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="7">Last 7 days</SelectItem>
+                <SelectItem value="14">Last 14 days</SelectItem>
+                <SelectItem value="30">Last 30 days</SelectItem>
+                <SelectItem value="90">Last 90 days</SelectItem>
+              </SelectContent>
+            </Select>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Amount of historical data to use for forecasting
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <Card>
+        <CardContent className="pt-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <Label htmlFor="seasonality" className="text-base">Seasonality Adjustments</Label>
+              <p className="text-sm text-muted-foreground">
+                Apply seasonal adjustments to forecasts based on historical patterns
+              </p>
+            </div>
+            <Switch
+              id="seasonality"
+              checked={seasonalityEnabled}
+              onCheckedChange={setSeasonalityEnabled}
+            />
+          </div>
+          
+          {seasonalityEnabled && (
+            <div className="mt-4 grid gap-4 md:grid-cols-2">
+              <div>
+                <Label>Day of Week Adjustments</Label>
+                <Select defaultValue="none">
+                  <SelectTrigger className="mt-2">
+                    <SelectValue placeholder="Select adjustment" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">No adjustment</SelectItem>
+                    <SelectItem value="auto">Auto-calculate</SelectItem>
+                    <SelectItem value="manual">Manual settings</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div>
+                <Label>Monthly Adjustments</Label>
+                <Select defaultValue="none">
+                  <SelectTrigger className="mt-2">
+                    <SelectValue placeholder="Select adjustment" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">No adjustment</SelectItem>
+                    <SelectItem value="auto">Auto-calculate</SelectItem>
+                    <SelectItem value="manual">Manual settings</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+      
+      <div className="flex justify-end space-x-4">
+        <Button variant="outline">Reset to Defaults</Button>
+        <Button>Save Settings</Button>
+      </div>
+    </div>
+  )
+}

@@ -1,0 +1,103 @@
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { InventoryTable } from "@/components/inventory/inventory-table"
+import { InventoryImport } from "@/components/inventory/inventory-import"
+import { Plus, Upload } from 'lucide-react'
+
+export default function InventoryPage() {
+  return (
+    <div className="flex flex-col">
+      <div className="flex items-center justify-between border-b px-6 py-4">
+        <div>
+          <h1 className="text-2xl font-bold">Inventory Management</h1>
+          <p className="text-muted-foreground">Track and update your inventory levels</p>
+        </div>
+        <div className="flex items-center gap-4">
+          <Button variant="outline">
+            <Upload className="mr-2 h-4 w-4" />
+            Import Data
+          </Button>
+          <Button>
+            <Plus className="mr-2 h-4 w-4" />
+            Add Product
+          </Button>
+        </div>
+      </div>
+      
+      <div className="p-6">
+        <Tabs defaultValue="current">
+          <div className="flex items-center justify-between">
+            <TabsList>
+              <TabsTrigger value="current">Current Inventory</TabsTrigger>
+              <TabsTrigger value="reserve">Reserve Levels</TabsTrigger>
+              <TabsTrigger value="import">Import Data</TabsTrigger>
+            </TabsList>
+            
+            <div className="relative w-64">
+              <Input placeholder="Search products..." className="pl-8" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+            </div>
+          </div>
+          
+          <TabsContent value="current" className="mt-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Current Inventory</CardTitle>
+                <CardDescription>
+                  View and update your current inventory levels
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <InventoryTable />
+              </CardContent>
+            </Card>
+          </TabsContent>
+          
+          <TabsContent value="reserve" className="mt-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Reserve Levels</CardTitle>
+                <CardDescription>
+                  Set and manage your reserve inventory thresholds
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <InventoryTable showReserveControls />
+              </CardContent>
+            </Card>
+          </TabsContent>
+          
+          <TabsContent value="import" className="mt-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Import Inventory Data</CardTitle>
+                <CardDescription>
+                  Upload inventory data from CSV or Excel files
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <InventoryImport />
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </div>
+  )
+}

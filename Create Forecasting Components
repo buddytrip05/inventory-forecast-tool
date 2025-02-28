@@ -1,0 +1,53 @@
+"use client"
+
+import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis, CartesianGrid, Legend } from "recharts"
+
+const data = [
+  { day: "Day 1", demand: 42, forecast: 45 },
+  { day: "Day 2", demand: 38, forecast: 40 },
+  { day: "Day 3", demand: 45, forecast: 43 },
+  { day: "Day 4", demand: 40, forecast: 42 },
+  { day: "Day 5", demand: 35, forecast: 38 },
+  { day: "Day 6", demand: 30, forecast: 32 },
+  { day: "Day 7", demand: 28, forecast: 30 },
+  { day: "Day 8", demand: null, forecast: 35 },
+  { day: "Day 9", demand: null, forecast: 38 },
+  { day: "Day 10", demand: null, forecast: 40 },
+  { day: "Day 11", demand: null, forecast: 42 },
+  { day: "Day 12", demand: null, forecast: 45 },
+  { day: "Day 13", demand: null, forecast: 43 },
+  { day: "Day 14", demand: null, forecast: 40 },
+]
+
+export function ForecastChart() {
+  return (
+    <ResponsiveContainer width="100%" height={350}>
+      <LineChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="day" />
+        <YAxis />
+        <Tooltip />
+        <Legend />
+        <Line
+          type="monotone"
+          dataKey="demand"
+          name="Historical Demand"
+          stroke="#3b82f6"
+          strokeWidth={2}
+          dot={{ r: 4 }}
+          activeDot={{ r: 6 }}
+        />
+        <Line
+          type="monotone"
+          dataKey="forecast"
+          name="Forecasted Demand"
+          stroke="#f59e0b"
+          strokeWidth={2}
+          strokeDasharray="5 5"
+          dot={{ r: 4 }}
+          activeDot={{ r: 6 }}
+        />
+      </LineChart>
+    </ResponsiveContainer>
+  )
+}
